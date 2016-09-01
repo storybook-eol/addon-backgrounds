@@ -56,17 +56,30 @@ describe("Background Panel", () => {
 
   })
 
-  // it("should accept colors through channel and render the correct swatches with a default swatch", () => {
-  //   const SpiedChannel = new EventEmitter();
-  //   const backgroundPanel = TestUtils.renderIntoDocument(<BackgroundPanel channel={SpiedChannel} api={mockedApi} />);
-  //   SpiedChannel.emit("background-set", backgrounds);
+  it("should accept colors through channel and render the correct swatches with a default swatch", () => {
+    const SpiedChannel = new EventEmitter();
+    const backgroundPanel = TestUtils.renderIntoDocument(<BackgroundPanel channel={SpiedChannel} api={mockedApi} />);
+    SpiedChannel.emit("background-set", backgrounds);
 
-  //   expect(backgroundPanel.state.backgrounds[0].name).toBe(backgrounds[0].name);
-  //   expect(backgroundPanel.state.backgrounds[2].value).toBe(backgrounds[2].value);
+    expect(backgroundPanel.state.backgrounds[0].name).toBe(backgrounds[0].name);
+    expect(backgroundPanel.state.backgrounds[2].value).toBe(backgrounds[2].value);
 
-  //   //check to make sure the default bg was added
-  //   expect(backgroundPanel.state.backgrounds[4].value).toBe("transparent");
-  // });
+    //check to make sure the default bg was added
+    const headings = TestUtils.scryRenderedDOMComponentsWithTag(backgroundPanel, "h4");
+    expect(headings.length).toBe(10);
+  });
+
+  it("should unset all swatches on receiving the backgroun-unset message", () => {
+    const SpiedChannel = new EventEmitter();
+    const backgroundPanel = TestUtils.renderIntoDocument(<BackgroundPanel channel={SpiedChannel} api={mockedApi} />);
+    SpiedChannel.emit("background-set", backgrounds);
+
+    expect(backgroundPanel.state.backgrounds[0].name).toBe(backgrounds[0].name);
+    expect(backgroundPanel.state.backgrounds[2].value).toBe(backgrounds[2].value);
+
+    SpiedChannel.emit("background-unset");
+    expect(backgroundPanel.state.backgrounds.length).toBe(0);
+  });
 
   it("should pass the event from swatch clicks through the provided channel", () => {
     const SpiedChannel = new EventEmitter();
