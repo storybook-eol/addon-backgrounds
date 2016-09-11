@@ -41,6 +41,12 @@ export class BackgroundDecorator extends React.Component<any, any> {
     this.channel.emit("background-set", this.props.backgrounds);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.story !== this.props.story) {
+      this.story = nextProps.story();
+    }
+  }
+
   componentWillUnmount() {
     this.channel.removeListener("background", this.setBackground);
     this.channel.emit("background-unset");
