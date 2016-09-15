@@ -12,7 +12,7 @@ const style = {
     transition: "background 0.25s ease-in-out",
     backgroundPosition: "center",
     backgroundSize: "cover",
-    backgroundColor: "transparent",
+    background: "transparent",
   },
 };
 
