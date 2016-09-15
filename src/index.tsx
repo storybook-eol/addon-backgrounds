@@ -56,7 +56,7 @@ export class BackgroundDecorator extends React.Component<any, any> {
 
   render() {
     const styles = style.wrapper;
-    styles.backgroundColor = this.state.background;
+    styles.background = this.state.background;
     return <div style={assign({}, styles)}>{this.story}</div>;
   }
 }
