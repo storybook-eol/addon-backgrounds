@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import Swatch from "./Swatch";
-import assign = require("object-assign");
 
 const style = {
   font: {
@@ -46,7 +45,7 @@ storiesOf("First Component", module)
 `.trim();
 
 const Instructions = () => (
-  <div style={assign({ padding: "20px" }, style.font)}>
+  <div style={Object.assign({ padding: "20px" }, style.font)}>
     <h5 style={{ fontSize: "16px" }}>Setup Instructions</h5>
     <p>Please add the background decorator definition to your story.
     The background decorate accepts an array of items, which should include a

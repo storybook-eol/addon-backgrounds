@@ -1,9 +1,11 @@
 import * as React from "react"; // tslint:disable-line
-const EventEmitter = require("events"); // tslint:disable-line
+import EventEmitter from "events";
 import { shallow, mount } from "enzyme";
+import TestUtils from "react-dom/test-utils";
+
 import Swatch from "../Swatch";
-const TestUtils = require("react-addons-test-utils"); // tslint:disable-line
-const mockedSetBackround = (val: string) => {} // tslint:disable-line
+
+const mockedSetBackround = (val: string) => {}
 
 describe("Swatch", function() {
   it("should exist", () => {

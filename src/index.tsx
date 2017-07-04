@@ -1,6 +1,5 @@
 import * as React from "react";
 import addons from "@storybook/addons";
-import assign = require("object-assign"); // tslint:disable-line
 
 const style = {
   wrapper: {
@@ -14,7 +13,7 @@ const style = {
     backgroundPosition: "center",
     backgroundSize: "cover",
     background: "transparent",
-  },
+  } as any
 };
 
 export class BackgroundDecorator extends React.Component<any, any> {
@@ -58,7 +57,7 @@ export class BackgroundDecorator extends React.Component<any, any> {
   render() {
     const styles = style.wrapper;
     styles.background = this.state.background;
-    return <div style={assign({}, styles)}>{this.story}</div>;
+    return <div style={styles}>{this.story}</div>;
   }
 }
 
