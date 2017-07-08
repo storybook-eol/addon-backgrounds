@@ -1,7 +1,7 @@
-import * as React from "react";
+import React from "react";
+import addons from "@storybook/addons";
 
 import Swatch from "./Swatch";
-import assign = require("object-assign");
 
 const style = {
   font: {
@@ -10,24 +10,7 @@ const style = {
   },
 };
 
-export interface BackgroundDetail {
-  name?: string;
-  value: string;
-  default?: boolean;
-};
-
-export interface StoryBookAPI {
-  getQueryParam(param: string): string;
-  setQueryParams(params: { [key: string]: string } ): void;
-  selectStory(story: string, storyOf: string): void;
-}
-
-export interface BackgroundPanelProps {
-  channel: NodeJS.EventEmitter;
-  api: StoryBookAPI;
-}
-
-const defaultBackground: BackgroundDetail = {
+const defaultBackground = {
   name: "default",
   value: "transparent",
 };
@@ -45,7 +28,7 @@ storiesOf("First Component", module)
 `.trim();
 
 const Instructions = () => (
-  <div style={assign({ padding: "20px" }, style.font)}>
+  <div style={Object.assign({ padding: "20px" }, style.font)}>
     <h5 style={{ fontSize: "16px" }}>Setup Instructions</h5>
     <p>Please add the background decorator definition to your story.
     The background decorate accepts an array of items, which should include a
@@ -62,14 +45,20 @@ const Instructions = () => (
   </div>
 );
 
-export default class BackgroundPanel extends React.Component<BackgroundPanelProps, any> {
-
-  state = { backgrounds: [] };
-
+export default class BackgroundPanel extends React.Component {
   constructor(props) {
     super(props);
 
-    this.props.channel.on("background-set", backgrounds => {
+    // A channel is explicitly passed in for testing
+    if (this.props.channel) {
+      this.channel = this.props.channel;
+    } else {
+      this.channel = addons.getChannel();
+    }
+
+    this.state = { backgrounds: [] }
+
+    this.channel.on("background-set", backgrounds => {
       this.setState({ backgrounds });
       const currentBackground = this.props.api.getQueryParam("background");
 
@@ -81,21 +70,21 @@ export default class BackgroundPanel extends React.Component<BackgroundPanelProp
       }
     });
 
-    this.props.channel.on("background-unset", backgrounds => {
+    this.channel.on("background-unset", backgrounds => {
       this.setState({ backgrounds: [] });
       this.props.api.setQueryParams({ background: null });
     });
   }
 
-  private setBackgroundInPreview = (background) => this.props.channel.emit("background", background);
+  setBackgroundInPreview = (background) => this.channel.emit("background", background);
 
-  private setBackgroundFromSwatch = (background) => {
+  setBackgroundFromSwatch = (background) => {
     this.setBackgroundInPreview(background);
     this.props.api.setQueryParams({ background });
   }
 
   render () {
-    const backgrounds: BackgroundDetail[] = [...this.state.backgrounds];
+    const backgrounds = [...this.state.backgrounds];
 
     if (!backgrounds.length) return <Instructions />;
 
